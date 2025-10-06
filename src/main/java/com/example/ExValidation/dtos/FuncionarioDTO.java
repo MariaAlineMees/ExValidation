@@ -5,9 +5,9 @@ import jakarta.validation.constraints.*;
 
 public class FuncionarioDTO {
 
-    @NotNull
     private Long id;
 
+    @NotNull
     @NotBlank(message = "Nome é obrigatório")
     @Size(max = 120)
     private String nome;

@@ -2,6 +2,7 @@ package com.example.ExValidation.controllers;
 
 
 import com.example.ExValidation.dtos.FuncionarioDTO;
+import com.example.ExValidation.exceptions.ResourceNotFoundException;
 import com.example.ExValidation.services.FuncionarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,14 +34,13 @@ public class FuncionarioController {
         try {
             FuncionarioDTO dto = service.buscarPorId(id);
 
-            if (dto == null) {
-
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado com o ID: " + id);
-            }
-
             return ResponseEntity.ok(dto);
 
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuario não encontrado: " + e.getMessage());
+
+        }
+        catch (Exception e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + e.getMessage());
         }
