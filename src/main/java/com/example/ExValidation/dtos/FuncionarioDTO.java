@@ -1,5 +1,6 @@
 package com.example.ExValidation.dtos;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 
@@ -24,6 +25,18 @@ public class FuncionarioDTO {
     @Pattern(regexp = "\\d{11}", message = "O CPF deve ter 11 dígitos numéricos")
     @Size(max = 40)
     private String documento;
+
+
+    @NotBlank(message = "O cargo é obrigatório")
+    private String cargo;
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
 
     public String getNome() {
         return nome;

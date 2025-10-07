@@ -5,6 +5,7 @@ import com.example.ExValidation.dtos.FuncionarioDTO;
 import com.example.ExValidation.exceptions.ResourceNotFoundException;
 import com.example.ExValidation.services.FuncionarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,29 @@ public class FuncionarioController {
 
 
         return ResponseEntity.created(URI.create("/api/funcionarios/" + criado.getId())).body(criado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FuncionarioDTO> atualizar(@PathVariable Long id, @Valid @RequestBody FuncionarioDTO dto){
+        FuncionarioDTO atualizado = service.atualizar(id, dto);
+        return ResponseEntity.ok(atualizado);
+    }
+
+
+    @PatchMapping("/{id}/cargo")
+    public ResponseEntity<FuncionarioDTO> mudarCargo(
+            @PathVariable Long id,
+            @RequestParam @NotBlank(message = "O novo cargo não pode ser vazio") String novoCargo) {
+
+        FuncionarioDTO atualizado = service.mudarCargo(id, novoCargo);
+        return ResponseEntity.ok(atualizado);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

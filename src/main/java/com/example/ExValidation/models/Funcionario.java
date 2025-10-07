@@ -27,6 +27,8 @@ public class Funcionario {
     @Column(name = "documento", length = 40)
     private String documento;
 
+    @Column(nullable = false)
+    private String cargo;
 
 
 

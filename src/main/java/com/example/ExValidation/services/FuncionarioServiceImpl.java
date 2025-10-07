@@ -42,6 +42,17 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         return toDto(salvo);
     }
 
+    @Override
+    public FuncionarioDTO atualizar(Long id, FuncionarioDTO dto) {
+        Funcionario f = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
+
+        BeanUtils.copyProperties(dto, f, "id");
+
+        Funcionario atualizado = repository.save(f);
+        return toDto(atualizado);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public FuncionarioDTO buscarPorId(Long id) {
@@ -54,6 +65,25 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     @Override
     public List<FuncionarioDTO> listarTodos() {
         return repository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletar(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Funcionário não encontrado com o id " + id);
+        }
+        repository.deleteById(id);
+    }
+
+    @Override
+    public FuncionarioDTO mudarCargo(Long id, String novoCargo) {
+        Funcionario f = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
+
+        f.setCargo(novoCargo);
+
+        Funcionario atualizado = repository.save(f);
+        return toDto(atualizado);
     }
 
 }
